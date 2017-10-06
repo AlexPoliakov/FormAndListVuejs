@@ -1,60 +1,73 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://gitter.im/vuejs/vue" target="_blank">Gitter Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
+    <header>
+      <nav>
+        <router-link to="/">+ HOME</router-link>
+        <router-link to="/form">+ REGISTRATION FORM</router-link>
+        <router-link to="/users">+ LIST USER</router-link>
+      </nav>
+    </header>
+    <div class="box">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    padding: 0;
+    margin: 0;
+    font-family: "Helvetica Neue", sans-serif;
+    background-color: #f5f5f5;
+  }
+
+  #app {
+    max-width: 1140px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  header {
+    width: 100%;
+    height: 56px;
+    background-color: #fff;
+    box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, .095);
+    z-index: 80;
+    padding: 8px 16px;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+
+  nav {
+    list-style:none;
+    padding:0;
+    text-align: center;
+  }
+
+  nav a {
+    display: inline-block;
+    padding: 0 20px;
+    text-decoration: none;
+    color:  #8a8d96;
+    font-weight: 400;
+    line-height: 40px;
+  }
+
+  nav a:hover {
+    color: #272727;
+  }
+
+</style>
 
 <script>
 export default {
   name: 'app',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
-    }
-  }
 }
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
-</style>

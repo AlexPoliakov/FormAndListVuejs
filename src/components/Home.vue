@@ -1,3 +1,5 @@
+<!--Home page app-->
+
 <template>
     <div class='home'>
         <h2>{{ message }}</h2>

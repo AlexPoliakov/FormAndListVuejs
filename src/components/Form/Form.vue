@@ -1,9 +1,6 @@
 <template>
-    <div class="form__pg">
+    <div>
         <h2 class="name__form">{{ text }}</h2>
-        <div class="about" v-if="userShow">
-            <h3>{{ userMessageData }}</h3>
-        </div>
         <label for="name">First name:
             <input type="text" id="name" autofocus required placeholder="First name" v-model="user.firstName">
         </label>
@@ -13,12 +10,19 @@
         <label for="email">Email:
             <input type="email" id="email" required placeholder="Email" v-model="user.email">
         </label>
+        <label for="gender">Gender:
+            <input type="select" id="gender" list="your_gender" required placeholder="Gender" v-model="user.gender">
+            <datalist id="your_gender">
+                <option value="male"></option>
+                <option value="female"></option>
+            </datalist>
+        </label>
         <label for="photo">Picture:
-            <input type="text" id="photo" required placeholder="http://" v-model="user.picture">
+            <input type="url" id="photo" required placeholder="http://" v-model="user.picture">
         </label>
         <div class="form__photo">
             <img class="avatar" v-if='havePhoto' :src="user.picture" alt="No image">
-            <a v-else href="https://imgur.com/" target="_blank">
+            <a v-else href="" target="_blank">
                 Add avatar
             </a>
         </div>
@@ -53,14 +57,8 @@
             <textarea id="bio" required placeholder="Biography" v-model="user.about"></textarea>
         </label>
         <label for="date">Date registration:
-            <input type="date" id="date" required placeholder="Date registration" v-model="user.registered">
+            <input type="datetime" id="date" required placeholder="Date registration" v-model="user.registered">
         </label>
-        <button class="add_user" v-if="!show" @click="saveUser">
-            <i class="ion-person-add"></i>
-        </button>
-        <div class="search">
-            <pre>{{ user }}</pre>
-        </div>
     </div>
 </template>
 
@@ -69,90 +67,33 @@
     import Vue from 'vue';
 
     export default {
+        name: 'FormUser',
+        model: {
+            prop: 'user'
+        },
+        props: {
+            user: {
+                type: Object
+            },
+            header: String
+        },
         data() {
             return {
-                text: 'Registration Form',
-                show: false,
+                text: this.header,
                 messageUser: '',
-                user: {}
             }
         },
         // computed for Form component
         computed: {
             havePhoto() {
                 return this.user.picture !== '';
-            },
-            userMessageData() {
-                return `User: ${this.user.firstName} ${this.user.lastName} tel.: ${this.user.phone}`;
-            },
-            userShow() {
-                return (this.user.firstName && this.user.lastName);
             }
-        },
-        // method for Form component
-        methods: {
-            clearForm() {
-                for (let key in this.user) {
-                    this.user[key] = '';
-                }
-            },
-            saveUser() {
-                for (let prop in this.user) {
-                    if (this.user[prop] === '') {
-                        if (prop === "_id" || prop === "isActive") continue;
-                        alert(`Empty field: ${prop}`)
-                        return;
-                    }
-                }
-                EventBus.$emit('addUser', this.user);
-                this.clearForm();
-
-            },
-            setUserDate(obj) {
-                console.dir(obj);
-            },
-            getUser() {
-                let options = {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                };
-                axios.get({
-                    method: 'get',
-                    url: 'http://localhost:3000/user',
-                    timeout: 1000
-                })
-                    .then(response => {
-                        this.user = response[1];
-                        this.setUserDate(this.user);
-                    })
-                    .catch(error => {
-                        let err = new Error(error);
-                        console.log(err);
-                    });
-
-            }
-        },
-        // created for Form component
-        created() {
-            this.getUser();
         }
     }
 </script>
 
-<style>
-    .form__pg {
-        margin: 60px auto;
-        bottom: 0;
-        border: 1px solid lightsteelblue;
-        color: #afafaf;
-        background-color: #fff;
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-        width: 940px;
-    }
-
-    .name__form,
-    .name__list {
+<style scoped>
+    .name__form {
         text-align: center;
     }
 
@@ -172,6 +113,7 @@
         width: 95%;
         font-size: 16px;
         caret-color: red;
+        background-color: #f5f5f5;
     }
 
     input {
@@ -179,7 +121,7 @@
     }
 
     textarea {
-        height: 80px;
+        height: 100px;
     }
 
     #activity {
@@ -195,45 +137,12 @@
         margin-left: 40px;
     }
 
-    .add_user {
-        display: inline-block;
-        background-color: transparent;
-        border: 0;
-        width: 40px;
-        height: 40px;
-        font-size: 35px;
-        outline: none;
-        color: #9f9f9f;
-        cursor: pointer;
-        border-radius: 50%;
-        transition: all 0.3s ease-in-out;
-        margin: 10px 0 20px 40px;
-    }
-
-    .add_user:hover {
-        color: #272727;
-    }
-
     .avatar {
         width: inherit;
         height: inherit;
         text-align: center;
         font-size: 18px;
         line-height: 120px;
-    }
-
-    .search,
-    .about {
-        width: 91%;
-        margin: 10px 0 15px 40px;
-        overflow-x: hidden;
-        color: #272727;
-        border: 1px solid #afafaf;
-        background-color: #afafaf;
-    }
-
-    h3 {
-        margin-left: 5px;
     }
 
 </style>

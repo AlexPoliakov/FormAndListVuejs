@@ -3,8 +3,9 @@
     <header>
       <nav>
         <router-link to="/">+ HOME</router-link>
-        <router-link to="/form">+ REGISTRATION FORM</router-link>
+        <router-link to="/form/add">+ REGISTRATION FORM</router-link>
         <router-link to="/users">+ LIST USER</router-link>
+        <router-link to="/form/:id">+ MESSAGE</router-link>
       </nav>
     </header>
     <div class="box">
@@ -12,6 +13,12 @@
     </div>
   </div>
 </template>
+
+<script>
+    export default {
+        name: 'app'
+    }
+</script>
 
 <style>
   * {
@@ -26,7 +33,7 @@
   }
 
   #app {
-    max-width: 1140px;
+    max-width: 1240px;
     margin-right: auto;
     margin-left: auto;
   }
@@ -62,12 +69,5 @@
   nav a:hover {
     color: #272727;
   }
-
 </style>
-
-<script>
-export default {
-  name: 'app',
-}
-</script>
 

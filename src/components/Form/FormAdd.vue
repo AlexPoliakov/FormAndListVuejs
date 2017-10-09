@@ -1,0 +1,172 @@
+<template>
+    <div class="form__pg">
+        <div class="about" v-if="successAdded">
+            <h3 class="success">User {{ newUserData }}</h3>
+        </div>
+
+        <form-user v-model="user" :header="messageHeader"></form-user>
+        
+        <button class="add_user" v-if="!show" @click="validation">
+            <i class="ion-person-add"></i>
+        </button>
+        <button class="add_user" v-else>
+            <i class="ion-checkmark-round"></i>
+        </button>
+        <hr>
+        <div class="search">
+            <pre>{{ user }}</pre>
+        </div>
+    </div>
+</template>
+
+<script>
+    import Vue from 'vue';
+    import FormUser from './Form.vue';
+    import axios from 'axios';
+
+    const userTemplate = {
+        id: null,
+        firstName: '',
+        lastName: '',
+        email: '',
+        gender: '',
+        picture: 'http://placehold.it/128x128',
+        age: 0,
+        isActive: false,
+        accessLevel: '',
+        balance: '$',
+        phone: '',
+        address: '',
+        company: '',
+        about: '',
+        registered: ''
+    };
+
+    export default {
+        name: 'FormAdd',
+        components: {
+            FormUser
+        },
+        data() {
+            return {
+                messageHeader: 'Registration Form',
+                user: userTemplate,
+                serverMessage: 'successfully added',
+                show: false,
+                successAdded: false,
+                url: 'http://localhost:3000/users',
+                newUser: {}
+            }
+        },
+        computed: {
+            newUserData() {
+                return `${this.newUser.name} ${this.newUser.lastName} ${this.serverMessage}`;
+            }
+        },
+        methods: {
+            clearForm() {
+                for (let key in this.user) {
+                    if (key === 'picture') {
+                        this.user[key] = 'http://placehold.it/128x128';
+                    }else {
+                        this.user[key] = '';
+                    }
+                }
+            },
+
+            validation() {
+                for (let prop in this.user) {
+                    if (this.user[prop] === '') {
+                        if (prop === "id" || prop === "isActive") continue;
+                        alert(`Fill in the field: ${prop}`);
+                        return;
+                    }
+                }
+                this.setUser(this.user);
+            },
+
+            requestServerMessage() {
+                this.successAdded = true;
+                return this.newUser = {
+                    name: this.user.firstName,
+                    lastName: this.user.lastName
+                }
+            },
+
+            setUser(dataUser) {
+                axios({
+                    method: 'post',
+                    url: this.url,
+                    data: dataUser
+                })
+                    .then(response => {
+                        this.show = true;
+                        setTimeout(() => {
+                            this.$router.push({ path: '/users' });
+                        }, 3000);
+
+                    })
+                    .then(() => {
+                        this.requestServerMessage();
+                        this.clearForm();
+                    })
+                    .catch(error => {
+                        let err = new Error(error);
+                        console.log(err);
+                        this.serverMessage = `was't added. Try again.`;
+                        this.requestServerMessage();
+                    })
+            }
+        }
+    }
+</script>
+
+<style>
+    .form__pg {
+        margin: 60px auto;
+        bottom: 0;
+        border: 1px solid lightsteelblue;
+        color: #afafaf;
+        background-color: #fff;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+        width: 940px;
+    }
+
+    .add_user {
+        display: inline-block;
+        background-color: transparent;
+        border: 0;
+        width: 40px;
+        height: 40px;
+        font-size: 35px;
+        outline: none;
+        color: #9f9f9f;
+        cursor: pointer;
+        border-radius: 50%;
+        transition: all 0.3s ease-in-out;
+        margin: 10px 0 20px 40px;
+    }
+
+    .add_user:hover {
+        color: #272727;
+    }
+
+    .add_user:active {
+        background-color: rgba(0, 0, 0, .1);
+    }
+
+    .search,
+    .about {
+        width: 91%;
+        margin: 10px 0 15px 40px;
+        overflow-x: hidden;
+        color: #272727;
+        border: 1px solid #afafaf;
+        background-color: #f5f5f5;
+    }
+
+    h3 {
+        margin-left: 5px;
+        text-align: center;
+    }
+</style>

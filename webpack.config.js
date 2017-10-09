@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: './src/main.js',
@@ -47,15 +46,6 @@ module.exports = {
     hints: false
   },
   devtool: '#eval-source-map',
-    plugins: [
-        new HtmlWebpackPlugin({
-            title: 'Develop & Hot Module Replacement',
-            hash: true,
-            template: 'index.html'
-        }),
-        new webpack.HotModuleReplacementPlugin(),
-        new webpack.NamedModulesPlugin()
-    ]
 };
 
 if (process.env.NODE_ENV === 'production') {
@@ -76,11 +66,6 @@ if (process.env.NODE_ENV === 'production') {
     new webpack.LoaderOptionsPlugin({
       minimize: true
     }),
-      new HtmlWebpackPlugin({
-          title: 'Production',
-          hash: false,
-          template: 'index.html'
-      }),
       new webpack.optimize.ModuleConcatenationPlugin()
   ])
 }

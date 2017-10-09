@@ -24,6 +24,7 @@
     import FormUser from './Form.vue';
     import axios from 'axios';
 
+    // Template object for user data
     const userTemplate = {
         id: null,
         firstName: '',
@@ -50,20 +51,22 @@
         data() {
             return {
                 messageHeader: 'Registration Form',
-                user: userTemplate,
                 serverMessage: 'successfully added',
                 show: false,
                 successAdded: false,
+                user: userTemplate,
                 url: 'http://localhost:3000/users',
                 newUser: {}
             }
         },
         computed: {
+            // Computed message for displaying success or failure when adding a user
             newUserData() {
                 return `${this.newUser.name} ${this.newUser.lastName} ${this.serverMessage}`;
             }
         },
         methods: {
+            // Clear form fields after a successful user upload
             clearForm() {
                 for (let key in this.user) {
                     if (key === 'picture') {
@@ -73,7 +76,7 @@
                     }
                 }
             },
-
+            // Validation of the filling of form fields
             validation() {
                 for (let prop in this.user) {
                     if (this.user[prop] === '') {
@@ -84,7 +87,7 @@
                 }
                 this.setUser(this.user);
             },
-
+            // Displaying user data on successful upload
             requestServerMessage() {
                 this.successAdded = true;
                 return this.newUser = {
@@ -92,7 +95,7 @@
                     lastName: this.user.lastName
                 }
             },
-
+            // Sending a request for adding data to the server and processing the results
             setUser(dataUser) {
                 axios({
                     method: 'post',
@@ -100,19 +103,24 @@
                     data: dataUser
                 })
                     .then(response => {
+                        // Change the icon with the addition to success
                         this.show = true;
+                        // After 3 seconds, go to the list page
                         setTimeout(() => {
                             this.$router.push({ path: '/users' });
                         }, 3000);
 
                     })
                     .then(() => {
+                        // We call a method for displaying the inscription about success
                         this.requestServerMessage();
+                        // Clear form fields
                         this.clearForm();
                     })
                     .catch(error => {
                         let err = new Error(error);
                         console.log(err);
+                        // A method is called to display a failure message
                         this.serverMessage = `was't added. Try again.`;
                         this.requestServerMessage();
                     })

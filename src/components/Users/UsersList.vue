@@ -63,8 +63,9 @@
                 shortList: []
             }
         },
-        // method for List component
+
         methods: {
+            // Create an object with truncated properties to output the data in the table
             createShortList(list) {
                 this.shortList = list.map((key) => {
                     return {
@@ -79,7 +80,7 @@
                     }
                 });
             },
-
+            // Request to receive and process user data
             getAllUser() {
                 axios({
                     method:'get',
@@ -98,18 +99,19 @@
                         console.log(err);
                     });
             },
-
+            // Calling a method to go to the user data modification field
             changeDataUser(id) {
                 this.$router.push({ path: `/form/${id}`});
             }
         },
-        // computed for List component
+
         computed: {
+            // User count
             count() {
                 return (this.list.length);
             }
         },
-        // mounted for List component
+
         mounted() {
             this.getAllUser();
         }

@@ -109,6 +109,7 @@
                 })
                     .then(response => {
                         this.differentMessage = true;
+                        // After 3 seconds, go to the list of users
                         setTimeout(() => {
                             this.$router.push({ path: '/users' });
                         }, 3000);

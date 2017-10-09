@@ -20,11 +20,11 @@
         <label for="photo">Picture:
             <input type="url" id="photo" required placeholder="http://" v-model="user.picture">
         </label>
+        <button class="change_photo">
+            <i class="ion-android-download"></i>
+        </button>
         <div class="form__photo">
             <img class="avatar" v-if='havePhoto' :src="user.picture" alt="No image">
-            <a v-else href="" target="_blank">
-                Add avatar
-            </a>
         </div>
         <label for="age">Your age:
             <input type="number" id="age" required placeholder="Age" v-model="user.age">
@@ -68,13 +68,16 @@
 
     export default {
         name: 'FormUser',
+        // Allows the component to work with v-model
         model: {
             prop: 'user'
         },
         props: {
+            // Waiting for an input object with user data
             user: {
                 type: Object
             },
+            // Form Header
             header: String
         },
         data() {
@@ -83,7 +86,7 @@
                 messageUser: '',
             }
         },
-        // computed for Form component
+
         computed: {
             havePhoto() {
                 return this.user.picture !== '';
@@ -130,6 +133,7 @@
     }
 
     .form__photo {
+        display: inline-block;
         margin-top: 10px;
         width: 150px;
         height: 200px;
@@ -143,6 +147,29 @@
         text-align: center;
         font-size: 18px;
         line-height: 120px;
+    }
+
+    .change_photo {
+        display: block;
+        background-color: transparent;
+        border: 0;
+        width: 40px;
+        height: 40px;
+        font-size: 35px;
+        outline: none;
+        color: #9f9f9f;
+        cursor: pointer;
+        border-radius: 50%;
+        transition: all 0.3s ease-in-out;
+        margin: 10px 0 20px 40px;
+    }
+
+    .change_photo:hover {
+        color: #272727;
+    }
+
+    .change_photo:active {
+        background-color: rgba(0, 0, 0, .1);
     }
 
 </style>

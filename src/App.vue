@@ -5,7 +5,7 @@
         <router-link to="/">+ HOME</router-link>
         <router-link to="/form/add">+ REGISTRATION FORM</router-link>
         <router-link to="/users">+ LIST USER</router-link>
-        <router-link to="/form/:id">+ MESSAGE</router-link>
+        <router-link to="/form/id">+ SAMPLE</router-link>
       </nav>
     </header>
     <div class="box">

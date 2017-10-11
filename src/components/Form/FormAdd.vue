@@ -20,8 +20,6 @@
 </template>
 
 <script>
-    import Vue from 'vue';
-    import FormUser from './Form.vue';
     import axios from 'axios';
 
     // Template object for user data
@@ -46,7 +44,7 @@
     export default {
         name: 'FormAdd',
         components: {
-            FormUser
+            FormUser: () => import('./Form.vue')
         },
         data() {
             return {

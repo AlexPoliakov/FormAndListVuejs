@@ -25,7 +25,6 @@
 
 <script>
     import axios from 'axios';
-    import FormUser from './Form.vue';
 
     export default {
         name: 'FormEdit',
@@ -36,7 +35,7 @@
         },
 
         components: {
-            FormUser
+            FormUser: () => import('./Form.vue')
         },
         data() {
             return {

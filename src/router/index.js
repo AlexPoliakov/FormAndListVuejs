@@ -1,10 +1,10 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-import Home from '../components/Home.vue';
-import FormAdd from '../components/Form/FormAdd.vue'
-import UsersList from '../components/Users/UsersList.vue'
-import FormEdit from '../components/Form/FormEdit.vue'
+const Home = () => import ('../components/Home.vue');
+const FormAdd = () => import('../components/Form/FormAdd.vue');
+const UsersList = () => import('../components/Users/UsersList.vue');
+const FormEdit = () => import('../components/Form/FormEdit.vue');
 
 
 Vue.use(Router);

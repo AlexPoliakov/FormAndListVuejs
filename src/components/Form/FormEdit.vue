@@ -7,13 +7,13 @@
 
         <form-user v-model="user" :header="messageHeader"></form-user>
 
-        <button class="save_change" v-if="!differentMessage"@click="validation">
+        <button type="button" class="save_change" v-if="!differentMessage" @click="validation">
             <i class="ion-ios-unlocked"></i>
         </button>
-        <button class="save_change" v-else>
+        <button type="button" class="save_change" v-else>
             <i class="ion-ios-locked"></i>
         </button>
-        <button class="save_change" @click="removeUser">
+        <button type="button" class="save_change" @click="removeUser">
             <i class="ion-trash-b"></i>
         </button>
         <hr>
@@ -31,7 +31,8 @@
         name: 'FormEdit',
         // Get the input data (id)
         props: {
-          id: String
+          id: String,
+          required: true
         },
 
         components: {
@@ -50,13 +51,13 @@
         computed: {
           // Set this data user in message field class "about"
           setUserData() {
-              if (this.removeFlag) {
-                  return `User: ${this.user.firstName} ${this.user.lastName}, tel.: ${this.user.phone}`;
+              if (!this.removeFlag) {
+                  return 'User data deleted successfully.'
               }
-              return 'User data deleted successfully.'
+              return `User: ${this.user.firstName} ${this.user.lastName}, tel.: ${this.user.phone}`;
           },
           // Calculated path to user data
-          path() {
+          restUrl() {
               return `${this.url}${this.id}`;
           }
         },
@@ -83,11 +84,17 @@
                 }
                 this.saveChanges();
             },
+            // Redirect to Users List
+            redirect() {
+                setTimeout(() => {
+                    this.$router.push({ path: '/users' });
+                }, 3000);
+            },
             // Load data the selected user in Form for will change or remove
             loadDataUser() {
                 axios({
                     method:'get',
-                    url: this.path,
+                    url: this.restUrl,
                     headers: {
                         'Content-Type': 'application/json',
                     }
@@ -104,15 +111,13 @@
             saveChanges() {
                 axios({
                     method: 'patch',
-                    url: this.path,
+                    url: this.restUrl,
                     data: this.user
                 })
                     .then(response => {
                         this.differentMessage = true;
                         // After 3 seconds, go to the list of users
-                        setTimeout(() => {
-                            this.$router.push({ path: '/users' });
-                        }, 3000);
+                        this.redirect();
                     })
                     .catch(error => {
                         const err = new Error(error);

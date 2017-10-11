@@ -6,10 +6,10 @@
 
         <form-user v-model="user" :header="messageHeader"></form-user>
         
-        <button class="add_user" v-if="!show" @click="validation">
+        <button type="button" class="add_user" v-if="!show" @click="validation">
             <i class="ion-person-add"></i>
         </button>
-        <button class="add_user" v-else>
+        <button type="button" class="add_user" v-else>
             <i class="ion-checkmark-round"></i>
         </button>
         <hr>
@@ -85,7 +85,7 @@
                         return;
                     }
                 }
-                this.setUser(this.user);
+                this.setUser();
             },
             // Displaying user data on successful upload
             requestServerMessage() {
@@ -95,21 +95,24 @@
                     lastName: this.user.lastName
                 }
             },
+            // Redirect to Users List
+            redirect() {
+                setTimeout(() => {
+                    this.$router.push({ path: '/users' });
+                }, 3000);
+            },
             // Sending a request for adding data to the server and processing the results
-            setUser(dataUser) {
+            setUser() {
                 axios({
                     method: 'post',
                     url: this.url,
-                    data: dataUser
+                    data: this.user
                 })
                     .then(response => {
                         // Change the icon with the addition to success
                         this.show = true;
                         // After 3 seconds, go to the list page
-                        setTimeout(() => {
-                            this.$router.push({ path: '/users' });
-                        }, 3000);
-
+                        this.redirect();
                     })
                     .then(() => {
                         // We call a method for displaying the inscription about success

@@ -1,9 +1,9 @@
 <template>
     <div class="box_list">
         <div class="list__pg">
-            <h2 class="name__list">{{ text }}</h2>
+            <h2 class="name__list">{{ header }}</h2>
             <div class="users_count">
-                <h4 class="users_in_list">Number of Users {{ count }}</h4>
+                <h4 class="users_in_list">Number of Users {{ countUsers }}</h4>
                 <button class="refresh_list_but"><i class="ion-loop"></i></button>
             </div>
             <div class="choose_count">
@@ -29,7 +29,7 @@
             <div class="tbl-content">
                 <table cellpadding="0" cellspacing="0" border="0">
                     <tbody>
-                    <tr class="user" v-for="user in shortList">
+                    <tr class="user" v-for="(user, key) in shortList">
                         <td class="id">{{ user.id }}</td>
                         <td class="name">{{ user.firstName }}</td>
                         <td class="lastName">{{ user.lastName }}</td>
@@ -39,7 +39,7 @@
                         <td>{{ user.phone }}</td>
                         <td class="active">{{ user.isActive }}</td>
                         <td class="enter">
-                            <button class="change_user_data" @click="changeDataUser(user.id)">
+                            <button type="button" class="change_user_data" @click="choiсeThisUser(user.id)">
                                 <i class="ion-edit"></i>
                             </button>
                         </td>
@@ -58,16 +58,20 @@
         data() {
             return {
                 url: 'http://localhost:3000/users',
-                text: 'List Users',
+                header: 'List Users',
                 list: [],
                 shortList: []
             }
         },
 
-        methods: {
-            // Create an object with truncated properties to output the data in the table
-            createShortList(list) {
-                this.shortList = list.map((key) => {
+        computed: {
+            // User count
+            countUsers() {
+                return (this.shortList.length);
+            },
+            // Computed an object with truncated properties to output the data in the table
+            createShortList() {
+                return this.list.map((key) => {
                     return {
                         id: key.id,
                         firstName: key.firstName,
@@ -80,18 +84,18 @@
                     }
                 });
             },
+        },
+
+        methods: {
             // Request to receive and process user data
             getAllUser() {
                 axios({
                     method:'get',
-                    url: this.url,
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
+                    url: this.url
                 })
                     .then(response => {
-                        this.list = [...response.data];
-                        this.createShortList(this.list);
+                        this.list = response.data;
+                        this.shortList = this.createShortList;
                         this.list = []
                     })
                     .catch(error => {
@@ -100,15 +104,8 @@
                     });
             },
             // Calling a method to go to the user data modification field
-            changeDataUser(id) {
+            choiсeThisUser(id) {
                 this.$router.push({ path: `/form/${id}`});
-            }
-        },
-
-        computed: {
-            // User count
-            count() {
-                return (this.list.length);
             }
         },
 

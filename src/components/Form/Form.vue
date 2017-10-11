@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2 class="name__form">{{ text }}</h2>
+        <h2 class="name__form">{{ header }}</h2>
         <label for="name">First name:
             <input type="text" id="name" autofocus required placeholder="First name" v-model="user.firstName">
         </label>
@@ -24,10 +24,10 @@
             <i class="ion-android-download"></i>
         </button>
         <div class="form__photo">
-            <img class="avatar" v-if='havePhoto' :src="user.picture" alt="No image">
+            <img class="avatar" v-if="havePhoto" :src="user.picture" alt="No image">
         </div>
         <label for="age">Your age:
-            <input type="number" id="age" required placeholder="Age" v-model="user.age">
+            <input type="number" id="age" required placeholder="Age" v-model.number="user.age">
         </label>
         <label for="activity">Activity:
             <input type="checkbox" id="activity" required v-model="user.isActive">Yes
@@ -64,7 +64,6 @@
 
 <script>
     import axios from 'axios';
-    import Vue from 'vue';
 
     export default {
         name: 'FormUser',
@@ -75,15 +74,18 @@
         props: {
             // Waiting for an input object with user data
             user: {
-                type: Object
+                type: Object,
+                required: true
             },
             // Form Header
-            header: String
+            header:{
+                type: String,
+                required: true
+            }
         },
         data() {
             return {
-                text: this.header,
-                messageUser: '',
+                messageUser: ''
             }
         },
 
